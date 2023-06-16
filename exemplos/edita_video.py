@@ -20,6 +20,9 @@ height = int(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 # Tamanho do video
 output_video = cv2.VideoWriter( './saida/out.avi',cv2.VideoWriter_fourcc(*'DIVX'), 24, (width, height))
 
+
+count = 0
+
 # Loop de leitura frame por frame
 while True:
     # Le um frame do video e, guarda o resultado da leitura
@@ -29,15 +32,46 @@ while True:
     # Se nao conseguiu ler o frame, para o laco
     if not ret:
         break
-    
-    # Vamos editar o frame com um retangulo
-    cv2.rectangle(
+
+
+    # haarcascade
+    face_cascade = cv2.CascadeClassifier(
+        filename=f"{cv2.data.haarcascades}/haarcascade_frontalface_default.xml"
+    )
+
+    # Le o frame de numero igual a variavel count
+    frame = cv2.imread(filename="./saida/frames/frame%d.jpg"%count)
+    # escala de cinza
+    gray_frame = cv2.cvtColor(src=frame, code=cv2.COLOR_BGR2GRAY)
+    # add +1 ao count
+    count +=1
+
+    # Passa o detector em cascata pelo método multi scale
+    # os parametros foram testados e escolhidos o de melhor resultado visto
+    faces = face_cascade.detectMultiScale(
+        image=gray_frame, 
+        scaleFactor=1.25, # Mudança de escala a cada passada
+        minNeighbors=6, # Verifica os vizinhos antes de promover o ponto a ret
+        # minSize=[30,30],
+        # Tamanhao maximo do retangulo para detecção
+        # Foi setado esse valor por sem ele havia muito erro
+        maxSize=[150,150] 
+    )
+    # Confere se no frame há alguma face
+    if len(faces):
+        # Armazena o valores desse retangulo
+        x, y, w, h = faces[0]
+        # Desenha o retangulo
+        cv2.rectangle(
             img=frame,
-            pt1=(100, 100),
-            pt2=(300, 300),
+            pt1=(x, y),
+            pt2=(x+w, y+h),
             color=(0,0,255),
-            thickness=5
+            thickness=2
         )
+    # ==============
+
+
 
     # Exibe o frame
     cv2.imshow('Video Playback', frame)
