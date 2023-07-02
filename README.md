@@ -2,16 +2,18 @@
 
 ## Enunciado
 
-Desenvolva um código em Python capaz de utilizar o openCV para a leitura de um vídeo (frame a frame) e, para cada frame, o seu código deve identificar e marcar na imagem os retângulos correspondentes a cada uma das faces encontradas. Ao final do código, um novo vídeo deve ser salvo com a(s) face(s) identificada(s).
+Para o funcionamento correto do codigo acima, primeiro instale a lib do open cv e depois rode os 2 scripts na sequencia
 
-Para a detecção das faces, pode-se utilizar a abordagem que quiser (haar cascade, filtro de correlação, YOLO). Não há a necessidade de fazer o fine tuning da detecção. Se o código é capaz de identificar faces corretamente na maior parte do tempo, considera-se como uma aplicação aceitável para esta etapa da prova.
+### retira_frames
 
-Boa prova =)
+Nesse script, primeiramente é feito a leitura de cada frame do video e armazenado na pasta "saida/frames/". Não subi os frames retirados para facilitar, por isso ela atualmente esta apenas com um txt vazio
 
-## Exemplos
+### edita_video
 
-Este repositório conta com dois exemplos, ambos na pasta de exemplos:
+Nesse script lemos cada frame que retiramos previamente e rodamos o algortimo Haar Cascade do opencv. Foi modificado alguns parametros para que acerte o maior numero de frames possiveis, ````scaleFactor=1.25, minNeighbors=6 e maxSize=[150,150]````, esse ultimo parametro diminui a quantidade de quadrados vazios achados, garantido que apenas retangulos pequenos sejam validos, suficiente para os rostos. 
+Para previnir erros de faces não encontradas, apenas desenhamos eles se o tamanha do array de faces for maior que 0 ```if len(faces):```
 
-1. `reproduz_video.py` -> exemplo de leitura e reprodução de vídeo utilizando o opencv; e
-2. `edita_video.py` -> exemplo onde é possível ver como se abre um vídeo com o opencv e edita-o frame a frame, salvando um único arquivo de vídeo ao final.
+No final todos os frames são convertidos em um unido video que se encontra na pasta __saida__
+
+
 
